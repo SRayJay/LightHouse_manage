@@ -1,5 +1,10 @@
-<script setup lang="ts">
+<script setup lang="ts">import { onMounted } from 'vue';
+import storage from "./utils/storage.js";
 
+onMounted(()=>{
+  
+
+})
 </script>
 
 <template>
