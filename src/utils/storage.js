@@ -3,7 +3,7 @@
  * @author SRayJay
  */
 
-import config from "./../config/index"
+import config from "../config/index"
 export default {
     getItem(key){
         return this.getStorage()[key]
