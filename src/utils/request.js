@@ -4,7 +4,7 @@
 
 import axios from 'axios'
 import cfg from './../config/index'
-import message from 'ant-design-vue'
+import {message} from 'ant-design-vue'
 
 const TOKEN_INVALID = '请重新登录'
 const NETWORK_ERROR = '请求异常，请稍后重试'

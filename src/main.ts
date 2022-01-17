@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
+import store from './store'
 import axios from 'axios'
 import storage from "./utils/storage.js"
 // import config from './config'
@@ -12,6 +13,7 @@ const app = createApp(App)
 
 app.config.globalProperties.$storage = storage;
 app.use(router)
+app.use(store)
 app.use(Antd)
 
 
