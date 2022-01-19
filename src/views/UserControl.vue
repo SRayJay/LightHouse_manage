@@ -15,45 +15,43 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue';
 interface User {
-  name: string,
-  age: number,
+  userName: string,
+  signature: string,
 }
 let searchtext = ref<string>('')
-const onSearch = () => {
-  console.log(searchtext.value)
+const onSearch = (searchtext: String) => {
+  console.log(searchtext)
+  api.checkUserList(searchtext).then(res => {
+    dataSource.length = 0
+    res.forEach(e => {
+      dataSource.push(e)
+    });
+  })
 }
 
 import api from '../api/index.js'
 onMounted(() => {
   api.checkUserList().then((res) => {
     console.log(res)
+    dataSource.length = 0
+    res.forEach(e => {
+      dataSource.push(e)
+    });
   })
 })
 
-const dataSource = reactive<User[]>([{
-  name: '胡彦斌',
-  age: 12
-},
-{
-  name: '胡彦斌',
-  age: 11
-}])
+const dataSource = reactive<User[]>([])
 const columns = [
   {
-    title: '姓名',
-    dataIndex: 'name',
-    key: 'name',
+    title: '用户名',
+    dataIndex: 'userName',
+    key: 'userName',
   },
   {
-    title: '年龄',
-    dataIndex: 'age',
-    key: 'age',
-  },
-  {
-    title: '住址',
-    dataIndex: 'address',
-    key: 'address',
-  },
+    title: '个性签名',
+    dataIndex: 'signature',
+    key: 'signature',
+  }
 ]
 </script>
 <style lang="scss" scoped>
