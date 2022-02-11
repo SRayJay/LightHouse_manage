@@ -15,5 +15,12 @@ export default{
             method:'get',
             data:params
         })
+    },
+    checkBookList(params){
+        return request({
+            url:'/book/checkBookList',
+            method:'get',
+            data:params
+        }) 
     }
 }

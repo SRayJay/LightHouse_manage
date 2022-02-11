@@ -16,6 +16,10 @@ const routes = [
         name: 'UserControl',
         path: '/usercontrol',
         component:() => import('../views/UserControl.vue')
+      },{
+        name: 'BookControl',
+        path: '/bookcontrol',
+        component: () => import('../views/BookControl.vue')
       }
     
     

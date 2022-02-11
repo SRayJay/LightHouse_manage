@@ -14,10 +14,12 @@
 </template>
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue';
-interface User {
-  userName: string,
-  signature: string,
-}
+import api from '../api/index.js';
+import { User } from '../types/global'
+// interface User {
+//   userName: string,
+//   signature: string,
+// }
 let searchtext = ref<string>('')
 const onSearch = (searchtext: String) => {
   console.log(searchtext)
@@ -29,7 +31,7 @@ const onSearch = (searchtext: String) => {
   })
 }
 
-import api from '../api/index.js'
+
 onMounted(() => {
   api.checkUserList().then((res) => {
     console.log(res)

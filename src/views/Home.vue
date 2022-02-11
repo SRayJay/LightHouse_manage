@@ -1,10 +1,14 @@
 <template>
   <div class="basic_layout">
     <div class="nav_side">
-      <div class="logo_bar">
-        管理系统</div>
-      <a-menu mode="vertical"
-       @click="handleClick" :openKeys="openKeys" :selectedKeys="selectedKeys" theme="dark">
+      <div class="logo_bar">管理系统</div>
+      <a-menu
+        mode="vertical"
+        @click="handleClick"
+        :openKeys="openKeys"
+        :selectedKeys="selectedKeys"
+        theme="dark"
+      >
         <a-menu-item key="1">
           <template #icon>
             <UserOutlined></UserOutlined>
@@ -33,8 +37,8 @@
 
 <script lang="ts" setup>
 import { UserOutlined, BookOutlined } from '@ant-design/icons-vue';
-import {ref,reactive} from 'vue'
-import {useRouter} from 'vue-router'
+import { ref, reactive } from 'vue'
+import { useRouter } from 'vue-router'
 let selectedKeys = ref<Array<string>>([])
 let openKeys = ref<Array<string>>([])
 let router = useRouter()
@@ -46,28 +50,29 @@ let router = useRouter()
 // const toLogin = () =>{
 //   router.push('/login')
 // }
- const handleClick = (e)=> {
-      console.log(e.key);
-      selectedKeys.value = [e.key]
-      switch(e.key){
-        case '1':
-          router.push('/usercontrol');
-          break;
-        case '2':
-          break;
-      }
-    };
+const handleClick = (e) => {
+  console.log(e.key);
+  selectedKeys.value = [e.key]
+  switch (e.key) {
+    case '1':
+      router.push('/usercontrol');
+      break;
+    case '2':
+      router.push('/bookcontrol')
+      break;
+  }
+};
 </script>
 
 <style lang="scss" scoped>
-.basic_layout{
-  position:relative;
-  .nav_side{
-    height:100vh;
+.basic_layout {
+  position: relative;
+  .nav_side {
+    height: 100vh;
     width: 200px;
     background-color: #001529;
     position: fixed;
-    .logo_bar{
+    .logo_bar {
       height: 60px;
       display: flex;
       align-items: center;
@@ -78,18 +83,18 @@ let router = useRouter()
     }
   }
 
-  .content_right{
+  .content_right {
     margin-left: 200px;
-    .nav_top{
+    .nav_top {
       height: 60px;
       line-height: 60px;
       // border-bottom: 1px solid red;
     }
-    .wrapper{
-      background:#eef0f3;
+    .wrapper {
+      background: #eef0f3;
       padding: 20px;
       height: calc(100vh - 60px);
-      .main{
+      .main {
         height: 100%;
         // background-color: ;
       }
