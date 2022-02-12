@@ -22,5 +22,26 @@ export default{
             method:'get',
             data:params
         }) 
+    },
+    getAuthors(params){
+        return request({
+            url:'/author/getAuthors',
+            method:'get',
+            data:params
+        })
+    },
+    addAuthor(params){
+        return request({
+            url:'/author/addAuthor',
+            method:'post',
+            data:params
+        })
+    },
+    deleteAuthor(params){
+        return request({
+            url:'/author/deleteAuthor',
+            method:'post',
+            data:params
+        })
     }
 }

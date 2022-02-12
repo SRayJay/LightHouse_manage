@@ -21,6 +21,24 @@
           </template>
           <span>书籍管理</span>
         </a-menu-item>
+        <a-menu-item key="3">
+          <template #icon>
+            <BookOutlined />
+          </template>
+          <span>作者管理</span>
+        </a-menu-item>
+        <a-menu-item key="4">
+          <template #icon>
+            <BookOutlined />
+          </template>
+          <span>出版社管理</span>
+        </a-menu-item>
+        <a-menu-item key="5">
+          <template #icon>
+            <BookOutlined />
+          </template>
+          <span>出品方管理</span>
+        </a-menu-item>
       </a-menu>
     </div>
     <div class="content_right">
@@ -59,6 +77,9 @@ const handleClick = (e) => {
       break;
     case '2':
       router.push('/bookcontrol')
+      break;
+    case '3':
+      router.push('/authorcontrol')
       break;
   }
 };

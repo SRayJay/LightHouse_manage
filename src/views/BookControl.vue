@@ -69,7 +69,8 @@ let searchtext = ref<String>('');
 let showAddBook = ref<Boolean>(false);
 let bookState = reactive({
     name: '',
-    intro: ''
+    intro: '',
+    author: '',
 })
 const onSearch = () => {
 

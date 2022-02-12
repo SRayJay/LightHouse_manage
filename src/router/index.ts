@@ -20,6 +20,11 @@ const routes = [
         name: 'BookControl',
         path: '/bookcontrol',
         component: () => import('../views/BookControl.vue')
+      },
+      {
+        name:'AuthorControl',
+        path: '/authorcontrol',
+        component:()=>import('../views/AuthorControl.vue')
       }
     
     
