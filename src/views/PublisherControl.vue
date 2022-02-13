@@ -1,53 +1,32 @@
 <template>
     <div>
         <div class="headline">
-            <a-button type="primary" @click="showAddAuthor = true">添加作者</a-button>
-            <a-input-search
-                v-model="searchtext"
-                class="searchBar"
-                placeholder="搜索作者"
-                style="width: 200px"
-                @search="onSearch"
-            />
+            <a-button type="primary" @click="showAddPublisher = true">添加出版社</a-button>
         </div>
         <a-table :dataSource="dataSource" :columns="columns">
             <template #bodyCell="{ column, text, record }">
-                <template v-if="column.dataIndex === 'photo'">
-                    <a-image :width="100" :src="config.BASEURL + record.photo" />
-                </template>
-                <template v-else-if="column.dataIndex === 'operation'">
-                    <a-popconfirm
-                        v-if="dataSource.length"
-                        title="确定删除?"
-                        @confirm="deleteAuthor(record.name)"
-                    >
-                        <a>删除</a>
-                    </a-popconfirm>
+                <template v-if="column.dataIndex === 'logo'">
+                    <a-image :width="100" :src="config.BASEURL + record.logo" />
                 </template>
             </template>
         </a-table>
-        <a-modal v-model:visible="showAddAuthor" title="添加作者" @ok="addAuthor">
-            <a-form :model="authorState">
-                <a-form-item label="姓名">
-                    <a-input v-model:value="authorState.name" />
+        <a-modal v-model:visible="showAddPublisher" title="添加出版社" @ok="addPublisher">
+            <a-form :model="publisherState">
+                <a-form-item label="出版社名">
+                    <a-input v-model:value="publisherState.name" />
                 </a-form-item>
-                <a-form-item label="国籍">
-                    <a-input v-model:value="authorState.country" />
-                </a-form-item>
+
                 <a-form-item label="简介">
-                    <a-textarea v-model:value="authorState.intro"></a-textarea>
+                    <a-textarea v-model:value="publisherState.intro"></a-textarea>
                 </a-form-item>
-                <a-form-item label="诺贝尔年份">
-                    <a-input v-model:value="authorState.nobel" />
-                </a-form-item>
-                <a-form-item label="图片">
+                <a-form-item label="Logo">
                     <a-upload
                         name="avatar"
                         list-type="picture-card"
                         class="avatar-uploader"
                         :show-upload-list="false"
                         :beforeUpload="beforeUpload"
-                        action="http://localhost:5000/upload/author"
+                        action="http://localhost:5000/upload/logo"
                         @change="handleChange"
                     >
                         <img class="avatar" v-if="imageUrl" :src="imageUrl" alt="avatar" />
@@ -64,68 +43,40 @@
 import { ref, reactive, onMounted } from 'vue'
 import api from '../api'
 import Util from '../utils/utils'
-import { message } from "ant-design-vue";
+import { message } from 'ant-design-vue'
 import config from '../config'
-let searchtext = ref<String>('');
-let showAddAuthor = ref<Boolean>(false);
-let authorState = reactive({
-    name: '',
-    country: '',
-    intro: '',
-    nobel: 0,
-    photo: ''
-})
+let showAddPublisher = ref<boolean>(false)
+// const BASEURL = 'http://localhost:5000'
 const dataSource = reactive([])
 
 const columns = [
     {
-        title: '姓名',
+        title: '出版社名',
         dataIndex: 'name',
         key: 'name',
     },
     {
-        title: '国籍',
-        dataIndex: 'country',
-        key: 'country',
-    }, {
         title: '简介',
         dataIndex: 'intro',
         key: 'intro',
-        ellipsis: true,
-    },
-    {
-        title: '诺贝尔',
-        dataIndex: 'nobel',
-        key: 'nobel',
-    },
-    {
-        title: '图片',
-        dataIndex: 'photo',
-        key: 'photo'
-    },
-    {
-        title: '操作',
-        dataIndex: 'operation',
-        key: 'operation'
+    }, {
+        title: 'Logo',
+        dataIndex: 'logo',
+        key: 'logo'
     }
 ]
-const onSearch = () => {
-
-}
-const addAuthor = () => {
-    console.log(authorState)
-    api.addAuthor(authorState).then((res) => {
+let publisherState = reactive({
+    name: '',
+    intro: '',
+    logo: ''
+})
+const addPublisher = () => {
+    console.log(publisherState)
+    api.addPublisher(publisherState).then((res) => {
         console.log(res)
-        showAddAuthor.value = false
-        authorState = { name: '', photo: '', intro: '', country: '', nobel: null }
-        getAuthors()
-    })
-}
-const deleteAuthor = (name) => {
-    console.log(name)
-    api.deleteAuthor({ 'name': name }).then((res) => {
-        console.log(res)
-        getAuthors()
+        showAddPublisher.value = false
+        publisherState = { name: '', intro: '', logo: '' }
+        getPublishers()
     })
 }
 // 上传图片模块
@@ -141,7 +92,7 @@ const handleChange = (info) => {
             // loading.value = false;
             console.log(info.file.response.url);
             trueImageUrl.value = info.file.response.url;
-            authorState.photo = info.file.response.data
+            publisherState.logo = info.file.response.data;
         });
     }
     if (info.file.status === "error") {
@@ -161,11 +112,10 @@ const beforeUpload = (file) => {
     return isJpgOrPng && isLt2M;
 };
 onMounted(() => {
-    getAuthors()
+    getPublishers()
 })
-function getAuthors() {
-    api.getAuthors().then((res) => {
-        console.log(res)
+function getPublishers() {
+    api.getPublishers().then((res) => {
         dataSource.length = 0
         res.forEach(e => {
             dataSource.push(e)

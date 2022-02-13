@@ -81,6 +81,12 @@ const handleClick = (e) => {
     case '3':
       router.push('/authorcontrol')
       break;
+    case '4':
+      router.push('/publishercontrol');
+      break;
+    case '5':
+      router.push('/producercontrol');
+      break;
   }
 };
 </script>

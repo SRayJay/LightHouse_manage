@@ -25,6 +25,14 @@ const routes = [
         name:'AuthorControl',
         path: '/authorcontrol',
         component:()=>import('../views/AuthorControl.vue')
+      },{
+        name:'PublisherControl',
+        path:'/publishercontrol',
+        component:()=>import('../views/PublisherControl.vue')
+      },{
+        name:'ProducerControl',
+        path:'/producercontrol',
+        component:()=>import('../views/ProducerControl.vue')
       }
     
     

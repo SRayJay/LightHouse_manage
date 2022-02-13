@@ -12,3 +12,11 @@ export type User = {
     signature: string,
   
 }
+
+export type Author = {
+    name:string,
+    intro:string,
+    country:string,
+    photo:string,
+    nobel:number
+}

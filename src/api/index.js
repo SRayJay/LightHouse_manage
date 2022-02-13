@@ -43,5 +43,33 @@ export default{
             method:'post',
             data:params
         })
+    },
+    getPublishers(params){
+        return request({
+            url:'/other/getPublishers',
+            method:'get',
+            data:params
+        })
+    },
+    getProducers(params){
+        return request({
+            url:'/other/getProducers',
+            method:'get',
+            data:params
+        })
+    },
+    addPublisher(params){
+        return request({
+            url:'/other/addPublisher',
+            method:'post',
+            data:params
+        })
+    },
+    addProducer(params){
+        return request({
+            url:'/other/addProducer',
+            method:'post',
+            data:params
+        })
     }
 }

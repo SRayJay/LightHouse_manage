@@ -1,6 +1,7 @@
 /**
  * 环境配置封装
  */
+const BASEURL = 'http://localhost:5000'
 const env = import.meta.env.MODE || 'prod'
 const EnvConfig = {
   development:{
@@ -19,6 +20,7 @@ const EnvConfig = {
 
 export default {
   env,
+  BASEURL,
   mock:false,
   namespace:"manager",
   ...EnvConfig[env]

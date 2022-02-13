@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="headline">
-            <a-button type="primary" @click="showAddBook = true">添加书籍</a-button>
+            <a-button type="primary" @click="startAddBook">添加书籍</a-button>
             <a-input-search
                 v-model="searchtext"
                 class="searchBar"
@@ -10,20 +10,26 @@
                 @search="onSearch"
             />
         </div>
-        <a-table :dataSource="dataSource" :columns="columns"></a-table>
+        <a-table :dataSource="dataSource" :columns="columns">
+            <template #bodyCell="{ column, text, record }">
+                <template v-if="column.dataIndex === 'cover'">
+                    <a-image :width="100" :src="config.BASEURL + record.cover" />
+                </template>
+            </template>
+        </a-table>
         <a-modal v-model:visible="showAddBook" title="添加书籍" @ok="addBook">
             <a-form :model="bookState">
                 <a-form-item label="书名">
                     <a-input v-model:value="bookState.name" />
                 </a-form-item>
                 <a-form-item label="作者">
-                    <a-input></a-input>
+                    <a-auto-complete v-model:value="bookState.author" :options="authorlist"></a-auto-complete>
                 </a-form-item>
                 <a-form-item label="出版社">
-                    <a-input></a-input>
+                    <a-auto-complete v-model:value="bookState.publisher" :options="publisherlist"></a-auto-complete>
                 </a-form-item>
                 <a-form-item label="出品方">
-                    <a-input></a-input>
+                    <a-auto-complete v-model:value="bookState.producer" :options="producerlist"></a-auto-complete>
                 </a-form-item>
                 <a-form-item label="ISBN">
                     <a-input></a-input>
@@ -41,7 +47,7 @@
                         class="avatar-uploader"
                         :show-upload-list="false"
                         :beforeUpload="beforeUpload"
-                        action="http://localhost:5000/book/uploadCover"
+                        action="http://localhost:5000/upload/cover"
                         @change="handleChange"
                     >
                         <img class="avatar" v-if="imageUrl" :src="imageUrl" alt="avatar" />
@@ -57,13 +63,12 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from 'vue'
 import api from '../api'
-import { Book } from '../types/global'
+import { Book, Author } from '../types/global'
 import { message } from "ant-design-vue";
-
-function getBase64(img: Blob, callback: (base64Url: string) => void) {
-    const reader = new FileReader();
-    reader.addEventListener("load", () => callback(reader.result as string));
-    reader.readAsDataURL(img);
+import config from '../config'
+import Util from '../utils/utils'
+interface autoComplete {
+    value: string
 }
 let searchtext = ref<String>('');
 let showAddBook = ref<Boolean>(false);
@@ -71,9 +76,37 @@ let bookState = reactive({
     name: '',
     intro: '',
     author: '',
+    publisher: '',
+    producer: '',
+    publishTime: '',
+    ISBN: ''
 })
 const onSearch = () => {
 
+}
+let authorlist = reactive<autoComplete[]>([])
+let publisherlist = reactive<autoComplete[]>([])
+let producerlist = reactive<autoComplete[]>([])
+const startAddBook = () => {
+    showAddBook.value = true
+    api.getAuthors().then((res) => {
+        res.forEach(e => {
+            let item: autoComplete = { value: e.name }
+            authorlist.push(item)
+        });
+    })
+    api.getPublishers().then(res => {
+        res.forEach(e => {
+            let item: autoComplete = { value: e.name }
+            publisherlist.push(item)
+        });
+    })
+    api.getProducers().then(res => {
+        res.forEach(e => {
+            let item: autoComplete = { value: e.name }
+            producerlist.push(item)
+        });
+    })
 }
 const addBook = () => {
 
@@ -88,20 +121,49 @@ const columns = [
         key: 'name',
     },
     {
+        title: '作者',
+        dataIndex: 'author',
+        key: 'author',
+    }, {
         title: '简介',
         dataIndex: 'intro',
         key: 'intro',
+        ellipsis: true,
+    }, {
+        title: '出版社',
+        dataIndex: 'publisher',
+        key: 'publisher',
+    },
+    {
+        title: '出品方',
+        dataIndex: 'producer',
+        key: 'producer',
+    },
+    {
+        title: '出版时间',
+        dataIndex: 'publishTime',
+        key: 'publishTime',
+    }, {
+        title: 'ISBN',
+        dataIndex: 'ISBN',
+        key: 'ISBN',
+    }, {
+        title: '封面',
+        dataIndex: 'cover',
+        key: 'cover'
     }
 ]
 
+
+
 onMounted(() => {
     api.checkBookList().then((res) => {
-        console.log(res)
         dataSource.length = 0
         res.forEach(e => {
             dataSource.push(e)
         });
     })
+
 })
 
 // 上传图片模块
@@ -112,7 +174,7 @@ const trueImageUrl = ref<string>("");
 const handleChange = (info) => {
     if (info.file.status === "done") {
         // 上传成功时拿到真正头像的url
-        getBase64(info.file.originFileObj, (base64Url: string) => {
+        Util.getBase64(info.file.originFileObj, (base64Url: string) => {
             imageUrl.value = base64Url;
             // loading.value = false;
             console.log(info.file.response.url);
