@@ -71,5 +71,26 @@ export default{
             method:'post',
             data:params
         })
+    },
+    addBook(params){
+        return request({
+            url:'/book/addBook',
+            method:'post',
+            data:params
+        })
+    },
+    deleteBook(params){
+        return request({
+            url:'/book/deleteBook',
+            method:'post',
+            data:params
+        })
+    },
+    addSeries(params){
+        return request({
+            url:'/other/addSeries',
+            method:'post',
+            data:params
+        })
     }
 }

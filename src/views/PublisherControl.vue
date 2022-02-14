@@ -8,8 +8,24 @@
                 <template v-if="column.dataIndex === 'logo'">
                     <a-image :width="100" :src="config.BASEURL + record.logo" />
                 </template>
+                <template v-else-if="column.dataIndex === 'operation'">
+                    <a-button @click="startAddSeries(record)">添加丛书</a-button>
+                </template>
+                <template v-else-if="column.dataIndex === 'series'">
+                    <p v-for="i in record.series">《{{ i.name }}》</p>
+                </template>
             </template>
         </a-table>
+        <a-modal v-model:visible="showAddSeries" title="添加丛书" @ok="addSeries">
+            <a-form :model="seriesState">
+                <a-form-item label="丛书名称">
+                    <a-input v-model:value="seriesState.name"></a-input>
+                </a-form-item>
+                <a-form-item label="册数">
+                    <a-input v-model:value="seriesState.count"></a-input>
+                </a-form-item>
+            </a-form>
+        </a-modal>
         <a-modal v-model:visible="showAddPublisher" title="添加出版社" @ok="addPublisher">
             <a-form :model="publisherState">
                 <a-form-item label="出版社名">
@@ -19,6 +35,7 @@
                 <a-form-item label="简介">
                     <a-textarea v-model:value="publisherState.intro"></a-textarea>
                 </a-form-item>
+
                 <a-form-item label="Logo">
                     <a-upload
                         name="avatar"
@@ -46,7 +63,7 @@ import Util from '../utils/utils'
 import { message } from 'ant-design-vue'
 import config from '../config'
 let showAddPublisher = ref<boolean>(false)
-// const BASEURL = 'http://localhost:5000'
+
 const dataSource = reactive([])
 
 const columns = [
@@ -60,9 +77,17 @@ const columns = [
         dataIndex: 'intro',
         key: 'intro',
     }, {
+        title: '丛书',
+        dataIndex: 'series',
+        key: 'series'
+    }, {
         title: 'Logo',
         dataIndex: 'logo',
         key: 'logo'
+    }, {
+        title: '操作',
+        dataIndex: 'operation',
+        key: 'operation'
     }
 ]
 let publisherState = reactive({
@@ -79,6 +104,25 @@ const addPublisher = () => {
         getPublishers()
     })
 }
+
+let showAddSeries = ref<boolean>(false)
+let seriesState = reactive({
+    name: '',
+    count: 0,
+    pubId: ''
+})
+const startAddSeries = (record) => {
+    console.log(record)
+    seriesState.pubId = record._id;
+    showAddSeries.value = true
+}
+const addSeries = () => {
+    api.addSeries(seriesState).then(res => {
+        showAddSeries.value = false
+        getPublishers()
+    })
+}
+
 // 上传图片模块
 const fileList = ref([]);
 const imageUrl = ref<string>("");
@@ -101,9 +145,9 @@ const handleChange = (info) => {
 };
 // 校验文件
 const beforeUpload = (file) => {
-    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
+    const isJpgOrPng = file.type === "image/jpeg" || file.type === 'image/svg+xml' || file.type === "image/png";
     if (!isJpgOrPng) {
-        message.error("只能上传jpg或png格式的图片");
+        message.error("只能上传jpg、svg或png格式的图片");
     }
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {

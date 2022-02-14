@@ -15,6 +15,15 @@
                 <template v-if="column.dataIndex === 'cover'">
                     <a-image :width="100" :src="config.BASEURL + record.cover" />
                 </template>
+                <template v-else-if="column.dataIndex === 'operation'">
+                    <a-popconfirm
+                        v-if="dataSource.length"
+                        title="确定删除?"
+                        @confirm="deleteBook(record.name)"
+                    >
+                        <a>删除</a>
+                    </a-popconfirm>
+                </template>
             </template>
         </a-table>
         <a-modal v-model:visible="showAddBook" title="添加书籍" @ok="addBook">
@@ -31,11 +40,18 @@
                 <a-form-item label="出品方">
                     <a-auto-complete v-model:value="bookState.producer" :options="producerlist"></a-auto-complete>
                 </a-form-item>
+                <a-form-item label="译者">
+                    <a-input v-model:value="bookState.translator"></a-input>
+                </a-form-item>
+
+                <a-form-item label="丛书">
+                    <a-input v-model:value="bookState.series"></a-input>
+                </a-form-item>
                 <a-form-item label="ISBN">
-                    <a-input></a-input>
+                    <a-input v-model:value="bookState.ISBN"></a-input>
                 </a-form-item>
                 <a-form-item label="出版时间">
-                    <a-input></a-input>
+                    <a-input v-model:value="bookState.publishTime"></a-input>
                 </a-form-item>
                 <a-form-item label="简介">
                     <a-textarea v-model:value="bookState.intro"></a-textarea>
@@ -79,37 +95,53 @@ let bookState = reactive({
     publisher: '',
     producer: '',
     publishTime: '',
-    ISBN: ''
+    translator: '',
+    series: '',
+    ISBN: '',
+    cover: ''
 })
 const onSearch = () => {
 
+}
+const deleteBook = (name) => {
+    api.deleteBook({ 'name': name }).then(res => {
+        console.log(res)
+        getBooks()
+    })
+}
+function getBooks() {
+    api.checkBookList().then((res) => {
+        dataSource.length = 0
+        res.forEach(e => {
+            dataSource.push(e)
+        });
+    })
 }
 let authorlist = reactive<autoComplete[]>([])
 let publisherlist = reactive<autoComplete[]>([])
 let producerlist = reactive<autoComplete[]>([])
 const startAddBook = () => {
     showAddBook.value = true
-    api.getAuthors().then((res) => {
-        res.forEach(e => {
-            let item: autoComplete = { value: e.name }
-            authorlist.push(item)
-        });
-    })
-    api.getPublishers().then(res => {
-        res.forEach(e => {
-            let item: autoComplete = { value: e.name }
-            publisherlist.push(item)
-        });
-    })
-    api.getProducers().then(res => {
-        res.forEach(e => {
-            let item: autoComplete = { value: e.name }
-            producerlist.push(item)
-        });
-    })
 }
 const addBook = () => {
+    console.log(bookState)
+    api.addBook(bookState).then(res => {
+        console.log(res)
+        showAddBook.value = false
+        bookState.name = '';
+        bookState.producer = '';
+        bookState.publishTime = '';
+        bookState.publisher = '';
+        bookState.ISBN = '';
+        bookState.author = '';
+        bookState.cover = '';
+        bookState.intro = '';
+        bookState.translator = '';
+        bookState.series = '';
+        imageUrl.value = '';
+        getBooks()
 
+    })
 }
 
 const dataSource = reactive<Book[]>([])
@@ -144,6 +176,14 @@ const columns = [
         dataIndex: 'publishTime',
         key: 'publishTime',
     }, {
+        title: '译者',
+        dataIndex: 'translator',
+        key: 'translator'
+    }, {
+        title: '丛书',
+        dataIndex: 'series',
+        key: 'series'
+    }, {
         title: 'ISBN',
         dataIndex: 'ISBN',
         key: 'ISBN',
@@ -151,16 +191,33 @@ const columns = [
         title: '封面',
         dataIndex: 'cover',
         key: 'cover'
+    }, {
+        title: '操作',
+        dataIndex: 'operation',
+        key: 'operation'
     }
 ]
 
 
 
 onMounted(() => {
-    api.checkBookList().then((res) => {
-        dataSource.length = 0
+    getBooks()
+    api.getAuthors().then((res) => {
         res.forEach(e => {
-            dataSource.push(e)
+            let item: autoComplete = { value: e.name }
+            authorlist.push(item)
+        });
+    })
+    api.getPublishers().then(res => {
+        res.forEach(e => {
+            let item: autoComplete = { value: e.name }
+            publisherlist.push(item)
+        });
+    })
+    api.getProducers().then(res => {
+        res.forEach(e => {
+            let item: autoComplete = { value: e.name }
+            producerlist.push(item)
         });
     })
 
@@ -179,6 +236,7 @@ const handleChange = (info) => {
             // loading.value = false;
             console.log(info.file.response.url);
             trueImageUrl.value = info.file.response.url;
+            bookState.cover = info.file.response.data
         });
     }
     if (info.file.status === "error") {
