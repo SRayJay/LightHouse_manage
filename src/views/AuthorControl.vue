@@ -34,10 +34,16 @@
                 <a-form-item label="国籍">
                     <a-input v-model:value="authorState.country" />
                 </a-form-item>
+                <a-form-item label="出生日期">
+                    <a-input v-model:value="authorState.birth"></a-input>
+                </a-form-item>
+                <a-form-item label="逝世日期">
+                    <a-input v-model:value="authorState.death"></a-input>
+                </a-form-item>
                 <a-form-item label="简介">
                     <a-textarea v-model:value="authorState.intro"></a-textarea>
                 </a-form-item>
-                <a-form-item label="诺贝尔年份">
+                <a-form-item label="诺贝尔年份(无则为0)">
                     <a-input v-model:value="authorState.nobel" />
                 </a-form-item>
                 <a-form-item label="图片">
@@ -73,7 +79,9 @@ let authorState = reactive({
     country: '',
     intro: '',
     nobel: 0,
-    photo: ''
+    photo: '',
+    birth: '',
+    death: ''
 })
 const dataSource = reactive([])
 
@@ -117,7 +125,7 @@ const addAuthor = () => {
     api.addAuthor(authorState).then((res) => {
         console.log(res)
         showAddAuthor.value = false
-        authorState = { name: '', photo: '', intro: '', country: '', nobel: null }
+        authorState = { name: '', photo: '', intro: '', country: '', nobel: null, birth: '', death: '' }
         getAuthors()
     })
 }

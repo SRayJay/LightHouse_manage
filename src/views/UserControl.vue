@@ -9,12 +9,19 @@
         @search="onSearch"
       />
     </div>
-    <a-table :dataSource="dataSource" :columns="columns"></a-table>
+    <a-table :dataSource="dataSource" :columns="columns">
+      <template #bodyCell="{ column, text, record }">
+        <template v-if="column.dataIndex === 'avatar'">
+          <a-image :width="100" :src="config.BASEURL + record.avatar" />
+        </template>
+      </template>
+    </a-table>
   </div>
 </template>
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue';
 import api from '../api/index.js';
+import config from '../config'
 import { User } from '../types/global'
 // interface User {
 //   userName: string,
@@ -23,7 +30,7 @@ import { User } from '../types/global'
 let searchtext = ref<string>('')
 const onSearch = (searchtext: String) => {
   console.log(searchtext)
-  api.checkUserList(searchtext).then(res => {
+  api.getUserList(searchtext).then(res => {
     dataSource.length = 0
     res.forEach(e => {
       dataSource.push(e)
@@ -33,7 +40,7 @@ const onSearch = (searchtext: String) => {
 
 
 onMounted(() => {
-  api.checkUserList().then((res) => {
+  api.getUserList().then((res) => {
     console.log(res)
     dataSource.length = 0
     res.forEach(e => {
@@ -47,12 +54,13 @@ const columns = [
   {
     title: '用户名',
     dataIndex: 'userName',
-    key: 'userName',
   },
   {
     title: '个性签名',
     dataIndex: 'signature',
-    key: 'signature',
+  }, {
+    title: '头像',
+    dataIndex: 'avatar'
   }
 ]
 </script>

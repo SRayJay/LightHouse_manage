@@ -9,9 +9,9 @@ export default{
             // mock:false
         })
     },
-    checkUserList(params){
+    getUserList(params){
         return request({
-            url:'/user/checkUserList',
+            url:'/admin/getUserList',
             method:'get',
             data:params
         })

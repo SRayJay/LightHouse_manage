@@ -53,6 +53,12 @@
                 <a-form-item label="出版时间">
                     <a-input v-model:value="bookState.publishTime"></a-input>
                 </a-form-item>
+                <a-form-item label="所属">
+                    <a-input v-model:value="bookState.belong"></a-input>
+                </a-form-item>
+                <a-form-item label="分类">
+                    <a-input v-model:value="bookState.classify"></a-input>
+                </a-form-item>
                 <a-form-item label="简介">
                     <a-textarea v-model:value="bookState.intro"></a-textarea>
                 </a-form-item>
@@ -98,6 +104,8 @@ let bookState = reactive({
     translator: '',
     series: '',
     ISBN: '',
+    belong: '',
+    classify: '',
     cover: ''
 })
 const onSearch = () => {
@@ -138,6 +146,8 @@ const addBook = () => {
         bookState.intro = '';
         bookState.translator = '';
         bookState.series = '';
+        bookState.classify = '';
+        bookState.belong = '';
         imageUrl.value = '';
         getBooks()
 
@@ -183,6 +193,14 @@ const columns = [
         title: '丛书',
         dataIndex: 'series',
         key: 'series'
+    },
+    {
+        title: '所属',
+        dataIndex: 'belong'
+    },
+    {
+        title: '分类',
+        dataIndex: 'classify'
     }, {
         title: 'ISBN',
         dataIndex: 'ISBN',
