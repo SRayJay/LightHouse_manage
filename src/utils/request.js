@@ -11,7 +11,7 @@ const NETWORK_ERROR = '请求异常，请稍后重试'
 
 // 创建axios实例对象，添加全局配置
 const service = axios.create({
-  baseURL: cfg.baseApi,
+  baseURL: cfg.BASEURL,
   timeout: 8000
 })
 
@@ -45,22 +45,16 @@ function request(options){
   if(options.method.toLowerCase()==='get'){
     options.params = options.data;
   }
-  if(cfg.env==='prod'){
-    service.defaults.baseURL = cfg.baseApi
-  }else{
-    service.defaults.baseURL = cfg.mock ? cfg.mockApi:cfg.baseApi
-  }
-
+  service.defaults.baseURL = cfg.BASEURL
   return service(options)
 }
 
-['get','post','put','delete','patch'].forEach((item)=>{
+['get','post','put','delete','patch','options'].forEach((item)=>{
   request[item] = (url,data,options)=>{
     return request({
       url,
       data,
       method:item,
-      ...options
     })
   }
 })

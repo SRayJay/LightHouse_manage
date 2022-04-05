@@ -69,7 +69,7 @@
                         class="avatar-uploader"
                         :show-upload-list="false"
                         :beforeUpload="beforeUpload"
-                        action="http://localhost:5000/upload/cover"
+                        action="http://120.53.125.13:5000/upload/cover"
                         @change="handleChange"
                     >
                         <img class="avatar" v-if="imageUrl" :src="imageUrl" alt="avatar" />
@@ -118,7 +118,7 @@ const deleteBook = (name) => {
     })
 }
 function getBooks() {
-    api.checkBookList().then((res) => {
+    api.getBookList().then((res) => {
         dataSource.length = 0
         res.forEach(e => {
             dataSource.push(e)
@@ -164,7 +164,7 @@ const columns = [
     },
     {
         title: '作者',
-        dataIndex: 'author',
+        dataIndex: 'author.name',
         key: 'author',
     }, {
         title: '简介',

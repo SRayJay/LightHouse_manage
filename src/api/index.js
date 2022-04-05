@@ -16,9 +16,9 @@ export default{
             data:params
         })
     },
-    checkBookList(params){
+    getBookList(params){
         return request({
-            url:'/book/checkBookList',
+            url:'/admin/getBookList',
             method:'get',
             data:params
         }) 
@@ -74,14 +74,14 @@ export default{
     },
     addBook(params){
         return request({
-            url:'/book/addBook',
+            url:'/admin/addBook',
             method:'post',
             data:params
         })
     },
     deleteBook(params){
         return request({
-            url:'/book/deleteBook',
+            url:'/admin/deleteBook',
             method:'post',
             data:params
         })

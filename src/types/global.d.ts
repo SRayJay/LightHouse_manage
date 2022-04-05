@@ -1,8 +1,11 @@
 export type Book = {
 
-    bookId:number,
-    bookTitle:string,
-    authorName:string,
+    name:string,
+    author:{
+        _id:string,
+        name:string
+    },
+    
 
     
 }

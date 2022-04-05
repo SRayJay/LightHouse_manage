@@ -31,7 +31,7 @@
                 <a-form-item label="姓名">
                     <a-input v-model:value="authorState.name" />
                 </a-form-item>
-                <a-form-item label="国籍">
+                <a-form-item label="国家/地区">
                     <a-input v-model:value="authorState.country" />
                 </a-form-item>
                 <a-form-item label="出生日期">
@@ -53,7 +53,7 @@
                         class="avatar-uploader"
                         :show-upload-list="false"
                         :beforeUpload="beforeUpload"
-                        action="http://localhost:5000/upload/author"
+                        action="http://120.53.125.13:5000/upload/author"
                         @change="handleChange"
                     >
                         <img class="avatar" v-if="imageUrl" :src="imageUrl" alt="avatar" />
@@ -92,7 +92,7 @@ const columns = [
         key: 'name',
     },
     {
-        title: '国籍',
+        title: '国家/地区',
         dataIndex: 'country',
         key: 'country',
     }, {
@@ -125,7 +125,15 @@ const addAuthor = () => {
     api.addAuthor(authorState).then((res) => {
         console.log(res)
         showAddAuthor.value = false
-        authorState = { name: '', photo: '', intro: '', country: '', nobel: null, birth: '', death: '' }
+        authorState.name = ''
+        authorState.birth = ''
+        authorState.death = ''
+        authorState.country = ''
+        authorState.intro = ''
+        authorState.photo = ''
+        authorState.nobel = 0
+        imageUrl.value = ''
+        trueImageUrl.value = ''
         getAuthors()
     })
 }
