@@ -16,6 +16,7 @@
                     <a-image :width="100" :src="config.BASEURL + record.cover" />
                 </template>
                 <template v-else-if="column.dataIndex === 'operation'">
+                <a>编辑</a>/
                     <a-popconfirm
                         v-if="dataSource.length"
                         title="确定删除?"
@@ -23,7 +24,9 @@
                     >
                         <a>删除</a>
                     </a-popconfirm>
+                    
                 </template>
+                
             </template>
         </a-table>
         <a-modal v-model:visible="showAddBook" title="添加书籍" @ok="addBook">

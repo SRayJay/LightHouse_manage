@@ -39,12 +39,18 @@
           </template>
           <span>出品方管理</span>
         </a-menu-item>
+        <a-menu-item key="6">
+          <template #icon>
+            <compass-outlined />
+          </template>
+          <span>社交功能管理</span>
+          </a-menu-item>
       </a-menu>
     </div>
     <div class="content_right">
       <div class="nav_top flex-between">
-        <div class="bread pl20">面包屑</div>
-        <div class="admin pr20">用户</div>
+        <div class="bread pl20"></div>
+        <div class="admin pr20">admin</div>
       </div>
       <div class="wrapper">
         <router-view class="main"></router-view>
@@ -54,7 +60,7 @@
 </template>
 
 <script lang="ts" setup>
-import { UserOutlined, BookOutlined } from '@ant-design/icons-vue';
+import { UserOutlined, BookOutlined,CompassOutlined } from '@ant-design/icons-vue';
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 let selectedKeys = ref<Array<string>>([])
@@ -86,6 +92,9 @@ const handleClick = (e) => {
       break;
     case '5':
       router.push('/producercontrol');
+      break;
+    case '6':
+      router.push('/socialcontrol');
       break;
   }
 };

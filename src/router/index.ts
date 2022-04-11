@@ -33,6 +33,10 @@ const routes = [
         name:'ProducerControl',
         path:'/producercontrol',
         component:()=>import('../views/ProducerControl.vue')
+      },{
+        name:'SocialControl',
+        path:'/socialcontrol',
+        component:()=>import('../views/SocialControl.vue')
       }
     
     

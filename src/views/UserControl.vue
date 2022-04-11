@@ -14,6 +14,9 @@
         <template v-if="column.dataIndex === 'avatar'">
           <a-image :width="100" :src="config.BASEURL + record.avatar" />
         </template>
+        <template v-else-if="column.dataIndex === 'operation'">
+          <a>查看</a>
+        </template>
       </template>
     </a-table>
   </div>
@@ -58,9 +61,18 @@ const columns = [
   {
     title: '个性签名',
     dataIndex: 'signature',
+  },{
+    title:'城市',
+    dataIndex:'city'
   }, {
+    title:'上次登录',
+    dataIndex:'lastLoginTime'
+  },{
     title: '头像',
     dataIndex: 'avatar'
+  },{
+    title:'操作',
+    dataIndex:'operation'
   }
 ]
 </script>

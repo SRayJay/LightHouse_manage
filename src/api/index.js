@@ -92,5 +92,19 @@ export default{
             method:'post',
             data:params
         })
+    },
+    getMoments(data){
+        return request({
+            url:'/admin/getMoments',
+            method:'get',
+            data
+        })
+    },
+    getComments(data){
+        return request({
+            url:'/admin/getComments',
+            method:'get',
+            data
+        })
     }
 }

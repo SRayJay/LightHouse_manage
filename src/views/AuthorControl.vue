@@ -170,11 +170,11 @@ const beforeUpload = (file) => {
     if (!isJpgOrPng) {
         message.error("只能上传jpg或png格式的图片");
     }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-        message.error("图片必须小于2MB");
+    const isLt3M = file.size / 1024 / 1024 < 3;
+    if (!isLt3M) {
+        message.error("图片必须小于3MB");
     }
-    return isJpgOrPng && isLt2M;
+    return isJpgOrPng && isLt3M;
 };
 onMounted(() => {
     getAuthors()
