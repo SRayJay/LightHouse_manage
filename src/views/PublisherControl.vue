@@ -43,7 +43,7 @@
                         class="avatar-uploader"
                         :show-upload-list="false"
                         :beforeUpload="beforeUpload"
-                        action="http://120.53.125.13:5000/upload/logo"
+                        action="http://localhost:5000/upload/logo"
                         @change="handleChange"
                     >
                         <img class="avatar" v-if="imageUrl" :src="imageUrl" alt="avatar" />

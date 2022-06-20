@@ -106,5 +106,12 @@ export default{
             method:'get',
             data
         })
+    },
+    searchBooks(data){
+        return request({
+            url:'/book/searchBooks',
+            method:'get',
+            data
+        })
     }
 }

@@ -3,7 +3,7 @@
         <div class="headline">
             <a-button type="primary" @click="startAddBook">添加书籍</a-button>
             <a-input-search
-                v-model="searchtext"
+                v-model:value="searchtext"
                 class="searchBar"
                 placeholder="搜索书籍"
                 style="width: 200px"
@@ -14,6 +14,9 @@
             <template #bodyCell="{ column, text, record }">
                 <template v-if="column.dataIndex === 'cover'">
                     <a-image :width="100" :src="config.BASEURL + record.cover" />
+                </template>
+                <template v-else-if="column.dataIndex === 'author'">
+                    {{record.author.name}}
                 </template>
                 <template v-else-if="column.dataIndex === 'operation'">
                 <a>编辑</a>/
@@ -72,7 +75,7 @@
                         class="avatar-uploader"
                         :show-upload-list="false"
                         :beforeUpload="beforeUpload"
-                        action="http://120.53.125.13:5000/upload/cover"
+                        action="http://localhost:5000/upload/cover"
                         @change="handleChange"
                     >
                         <img class="avatar" v-if="imageUrl" :src="imageUrl" alt="avatar" />
@@ -112,7 +115,16 @@ let bookState = reactive({
     cover: ''
 })
 const onSearch = () => {
-
+    if(!searchtext.value.trim()){
+        getBooks()
+        return
+    }
+    api.searchBooks(searchtext.value).then(res => {
+        dataSource.length = 0
+        res.forEach(e => {
+            dataSource.push(e)
+        });
+  })
 }
 const deleteBook = (name) => {
     api.deleteBook({ 'name': name }).then(res => {
@@ -167,7 +179,7 @@ const columns = [
     },
     {
         title: '作者',
-        dataIndex: 'author.name',
+        dataIndex: 'author',
         key: 'author',
     }, {
         title: '简介',
